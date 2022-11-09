@@ -3,7 +3,7 @@
 
 const { getSelectors, FacetCutAction } = require('./libraries/diamond.js')
 
-async function deployDiamond () {
+async function deployDiamond() {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
@@ -21,7 +21,8 @@ async function deployDiamond () {
   const FacetNames = [
     'DiamondCutFacet',
     'DiamondLoupeFacet',
-    'OwnershipFacet'
+    // 'OwnershipFacet',
+    // 'Event'
   ]
   // The `facetCuts` variable is the FacetCut[] that contains the functions to add during diamond deployment
   const facetCuts = []
@@ -30,10 +31,16 @@ async function deployDiamond () {
     const facet = await Facet.deploy()
     await facet.deployed()
     console.log(`${FacetName} deployed: ${facet.address}`)
+
+    //TODO : Look for cleaner ways
+    let selectors = getSelectors(facet)
+    if (FacetName === 'Event') {
+      selectors = getSelectors(facet).remove(['supportsInterface(bytes4)'])
+    }
     facetCuts.push({
       facetAddress: facet.address,
       action: FacetCutAction.Add,
-      functionSelectors: getSelectors(facet)
+      functionSelectors: selectors
     })
   }
 
