@@ -22,7 +22,7 @@ async function deployDiamond() {
     'DiamondCutFacet',
     'DiamondLoupeFacet',
     // 'OwnershipFacet',
-    // 'Event'
+    'Event'
   ]
   // The `facetCuts` variable is the FacetCut[] that contains the functions to add during diamond deployment
   const facetCuts = []
