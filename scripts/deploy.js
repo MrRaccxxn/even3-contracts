@@ -21,8 +21,7 @@ async function deployDiamond() {
   const FacetNames = [
     'DiamondCutFacet',
     'DiamondLoupeFacet',
-    // 'OwnershipFacet',
-    'Event'
+    'EventFacet'
   ]
   // The `facetCuts` variable is the FacetCut[] that contains the functions to add during diamond deployment
   const facetCuts = []
@@ -34,7 +33,7 @@ async function deployDiamond() {
 
     //TODO : Look for cleaner ways
     let selectors = getSelectors(facet)
-    if (FacetName === 'Event') {
+    if (FacetName === 'EventFacet') {
       selectors = getSelectors(facet).remove(['supportsInterface(bytes4)'])
     }
     facetCuts.push({
