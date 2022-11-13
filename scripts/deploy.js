@@ -1,7 +1,8 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 
-const { getSelectors, FacetCutAction } = require('./libraries/diamond.js')
+import { getSelectors, FacetCutAction } from './libraries/diamond.js';
+import { facetNames } from './utils/facetNames';
 
 async function deployDiamond() {
   const accounts = await ethers.getSigners()
@@ -18,11 +19,7 @@ async function deployDiamond() {
   // Deploy facets and set the `facetCuts` variable
   console.log('')
   console.log('Deploying facets')
-  const FacetNames = [
-    'DiamondCutFacet',
-    'DiamondLoupeFacet',
-    'EventFacet'
-  ]
+  const FacetNames = [Object.values(facetNames)]
   // The `facetCuts` variable is the FacetCut[] that contains the functions to add during diamond deployment
   const facetCuts = []
   for (const FacetName of FacetNames) {
