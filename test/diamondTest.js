@@ -69,26 +69,23 @@ describe('DiamondTest', async function () {
     )
   })
 
-  // it('should add eventFacet functions', async () => {
-  //   const EventFacet = await ethers.getContractFactory('EventFacet')
-  //   const eventFacet = await EventFacet.deploy()
-  //   await eventFacet.deployed()
-  //   addresses.push(eventFacet.address)
-  //   const selectors = getSelectors(eventFacet).remove(['supportsInterface(bytes4)'])
-  //   tx = await diamondCutFacet.diamondCut(
-  //     [{
-  //       facetAddress: eventFacet.address,
-  //       action: FacetCutAction.Add,
-  //       functionSelectors: selectors
-  //     }],
-  //     ethers.constants.AddressZero, '0x', { gasLimit: 800000 })
-  //   receipt = await tx.wait()
-  //   if (!receipt.status) {
-  //     throw Error(`Diamond upgrade failed: ${tx.hash}`)
-  //   }
-  //   result = await diamondLoupeFacet.facetFunctionSelectors(eventFacet.address)
-  //   assert.sameMembers(result, selectors)
-  // })
+  it('should remove eventFacet functions', async () => {
+    const eventFacet = await ethers.getContractAt('EventFacet', diamondAddress)
+    const selectors = getSelectors(eventFacet).remove(['supportsInterface(bytes4)'])
+    tx = await diamondCutFacet.diamondCut(
+      [{
+        facetAddress: ethers.constants.AddressZero,
+        action: FacetCutAction.Remove,
+        functionSelectors: selectors
+      }],
+      ethers.constants.AddressZero, '0x', { gasLimit: 800000 })
+    receipt = await tx.wait()
+    if (!receipt.status) {
+      throw Error(`Diamond upgrade failed: ${tx.hash}`)
+    }
+    result = await diamondLoupeFacet.facetFunctionSelectors(eventFacet.address)
+    assert.sameMembers(result, [])
+  })
 
   //   it('should replace supportsInterface function', async () => {
   //     const Test1Facet = await ethers.getContractFactory('Test1Facet')
